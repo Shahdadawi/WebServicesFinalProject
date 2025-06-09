@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+
+
+:root {
+    --mainFont: 'Marcellus', 'serif';
+}
+
+body {
+    font-family: var(--mainFont);
+    margin: 0;
+    padding: 0;
+
+}
+
+.navbar {
+    background-color: black;
+    color: white;
+}
+
+.icon-hover {
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+}
+
+.icon-hover:hover {
+    transform: translateY(-5px);
+}
+
+.hover-shake {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-shake:hover {
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(0);
+    }
+
+    25% {
+        transform: translate(-3px, 2px);
+    }
+
+    50% {
+        transform: translate(3px, -2px);
+    }
+
+    75% {
+        transform: translate(-2px, 1px);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+
+
+.notification-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #ff4081;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+}
+
+.product-icons {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.product-card:hover .product-icons {
+    opacity: 1;
+    visibility: visible;
+}
+
+.product-icons button {
+    width: 36px;
+    height: 36px;
+}
+
+.category-box {
+    background-color: #f7f3fa;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.icon-hover {
+    display: inline-block;
+    transition: transform 0.2s ease-in-out;
+}
+
+.icon-hover:hover {
+    transform: translateY(-6px) rotate(1deg);
+}
+
+.text-pink {
+    color: #ff4081;
+}
+
+.review-section {
+    background-image: url('assets/img/backFeed.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+.text-pink {
+    color: #ff4081;
+}
+
+.letter-spacing {
+    letter-spacing: 2px;
+}
+
+.review-section {
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+.text-pink {
+    color: #ff4081;
+}
+
+.letter-spacing {
+    letter-spacing: 2px;
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: white;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.blog-card {
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: #fafafa;
+    transition: transform 0.3s ease-in-out;
+}
+
+.blog-img {
+    transition: transform 0.4s ease-in-out;
+}
+
+.blog-card:hover .blog-img {
+    transform: scale(1.05);
+}
+
+.icon-hover {
+    transition: transform 0.3s ease-in-out;
+}
+
+.icon-hover:hover {
+    transform: scale(1.2);
+}
+
+.text-pink {
+    color: #ff4081;
+}
+
+

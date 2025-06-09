@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+
+
+:root {
+    --mainFont: 'Marcellus', 'serif';
+}
+
+body {
+    font-family: var(--mainFont);
+    margin: 0;
+    padding: 0;
+
+}
+
+.navbar {
+    background-color: white;
+    color: black;
+}
+
+.icon-hover {
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+}
+
+.icon-hover:hover {
+    transform: translateY(-5px);
+}
+
+.hover-shake {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-shake:hover {
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(0);
+    }
+
+    25% {
+        transform: translate(-3px, 2px);
+    }
+
+    50% {
+        transform: translate(3px, -2px);
+    }
+
+    75% {
+        transform: translate(-2px, 1px);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+
+
+.notification-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #ff4081;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+}
+
+.custom-heading {
+    font-family: 'Marcellus', 'serif';
+    font-size: 50px;
+
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(255, 44, 132, 0.5), 0 0 0 4px rgba(255, 44, 132, 0.1);
+    border: 2px solid #ff2c84;
+}
+
+.card {
+    border: 1px solid #eee;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+}
+
+.card:hover .card-title,
+.card:hover .text-danger {
+    color: #ff2c84;
+}
+
+.btn-dark:hover {
+    background-color: #222 !important;
+    color: #fff !important;
+}
+
+.btn-primary:hover {
+    background-color: #e6006e !important;
+}
+
+#main-image {
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+#main-image:hover {
+    transform: scale(1.02);
+}
+
+.thumbnail-img {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.thumbnail-img:hover {
+    transform: scale(1.05);
+    border-color: #ff2c84;
+}
+
+.color-circle {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.color-circle:hover {
+    transform: scale(1.2);
+    border-color: #ff2c84;
+}
+
+.icon-hover {
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.icon-hover:hover {
+    color: #ff2c84;
+    transform: scale(1.1);
+}
+
+footer a.text-muted:hover {
+    color: #ff2c84 !important;
+    text-decoration: underline;
+}
+
+footer .btn-outline-dark:hover {
+    background-color: #ff2c84;
+    color: #fff;
+    border-color: #ff2c84;
+}
+
+.wishlist-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+.wishlist-card:hover {
+    background-color: #fef7fa;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    transform: translateY(-3px);
+}
+
+.wishlist-card img {
+    border-radius: 8px;
+}
+
+.remove-item {
+    color: #999;
+    transition: color 0.2s ease;
+}
+
+.remove-item:hover {
+    color: #ff2c84;
+}
+
+.btn-pink {
+    background-color: #ff2c84;
+    color: white;
+    border: none;
+}
+
+.btn-pink:hover {
+    background-color: #e6006e;
+}
+
+#categories-container li:hover {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#color-filter li:hover {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.color-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.color-circle.selected::after {
+    content: "âœ”";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: white;
+}

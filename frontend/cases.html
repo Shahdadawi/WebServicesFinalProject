@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Case Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold mx-auto d-lg-none" href="#" style="font-size: 26px;">Human Rights Monitor</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="report.html">Report</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item d-none" id="dashboard-link">
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
+                    </li>
+
+                </ul>
+
+                <a class="navbar-brand fw-bold mx-auto d-none d-lg-block" href="#" style="font-size: 26px;">Human Rights
+                    Monitor</a>
+
+
+            </div>
+        </div>
+    </nav>
+
+
+    <header class="d-flex justify-content-center align-items-center text-black"
+        style="background: url('assets/img/slider/slide3.jpg') no-repeat; background-position: 20% center; background-size: cover; min-height: 300px;">
+        <h1 class="mb-4 text-center">Manage Human Rights Cases</h1>
+    </header>
+
+    <div class="container mt-5">
+
+        
+        <h4>Create New Case</h4>
+        <form id="caseForm" class="mb-4 ">
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <input type="text" id="title" class="form-control" placeholder="Case Title" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="description" class="form-control" placeholder="Description" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="violation" class="form-control" placeholder="Violation Type" required>
+                </div>
+                <div class="col-md-4">
+                    <select id="status" class="form-control">
+                        <option value="new">New</option>
+                        <option value="under_investigation">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="priority" class="form-control" placeholder="Priority (e.g. high)" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="country" class="form-control" placeholder="Country" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="region" class="form-control" placeholder="Region" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="city" class="form-control" placeholder="City" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Add Case</button>
+        </form>
+
+        
+        <h4>Existing Cases</h4>
+        <table class="table table-bordered" id="casesTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Violation</th>
+                    <th>Status</th>
+                    <th>City</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+       
+        <h4 class="mt-5">Convert Report to Case</h4>
+        <form id="convertForm" class="mb-4">
+            <select id="reportSelect" class="form-control mb-2"></select>
+            <button class="btn btn-success">Convert to Case</button>
+        </form>
+
+       
+        <h4> Update Case Status</h4>
+        <form id="statusForm" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <select id="caseSelect" class="form-control"></select>
+                </div>
+                <div class="col-md-6">
+                    <select id="newStatus" class="form-control">
+                        <option value="new">New</option>
+                        <option value="under_investigation">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-warning mt-2">Update Status</button>
+        </form>
+
+
+        <h4>View Case Details</h4>
+        <form id="viewForm" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <select id="viewCaseSelect" class="form-control"></select>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-secondary">View Details</button>
+                </div>
+            </div>
+        </form>
+
+        <div id="caseDetails" class="border p-3 d-none">
+            <h5>Case Info:</h5>
+            <pre id="caseInfo" class="bg-light p-2"></pre>
+        </div>
+
+        <h4> View Report Details</h4>
+        <form id="reportDetailsForm" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <select id="reportDetailsSelect" class="form-control"></select>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-secondary">View Report</button>
+                </div>
+            </div>
+        </form>
+
+        <div id="reportDetailsBox" class="border p-3 d-none">
+            <h5>Report Info:</h5>
+            <pre id="reportInfo" class="bg-light p-2"></pre>
+        </div>
+
+
+
+
+    </div>
+
+
+
+    <footer>
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center border-top pt-4 mt-4">
+                <small class="text-muted">© 2025 Human Rights Monitor. All rights reserved.</small>
+                <div class="d-flex gap-3 mt-3 mt-md-0">
+                    <a href="#" class="text-muted small">Privacy Policy</a>
+                    <a href="#" class="text-muted small">Terms</a>
+                    <a href="#" class="text-muted small">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="assets/js/cases.js"></script>
+    <script>
+        const role = localStorage.getItem("role");
+
+        if (role === "admin" || role === "investigator") {
+            const dashboardLink = document.getElementById("dashboard-link");
+            if (dashboardLink) {
+                dashboardLink.classList.remove("d-none");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
