@@ -1,9 +1,11 @@
 # backend/routes/cases.py
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException  , Body
 from backend.schemas_case import CaseCreate, CaseUpdate
 from datetime import datetime
 from bson import ObjectId
 from backend.database import cases_collection
+from datetime import datetime
+from backend.database import case_status_history_collection
 
 from backend.routes.crud.cases_crud import (
     add_case, get_cases, get_case,
@@ -38,12 +40,30 @@ def list_cases(status: str = None, city: str = None, violation_type: str = None)
         filters["violation_types"] = violation_type
     return get_cases(filters)
 
-#  PATCH /cases/{case_id}
 @router.patch("/{case_id}")
-def update_status(case_id: str, status_update: CaseUpdate):
-    success = update_case_status(case_id, status_update.status)
-    if not success:
+def update_status(
+    case_id: str,
+    status_update: CaseUpdate,
+    requester_email: str = Body(...)
+):
+    # تحديث الحالة في الكولكشن الرئيسي
+    success = cases_collection.update_one(
+        {"_id": ObjectId(case_id)},
+        {"$set": {"status": status_update.status, "updated_at": datetime.utcnow()}}
+    )
+
+    # إضافة السجل إلى history
+    history_entry = {
+        "case_id": case_id,
+        "new_status": status_update.status,
+        "updated_by": requester_email,
+        "timestamp": datetime.utcnow()
+    }
+    case_status_history_collection.insert_one(history_entry)
+
+    if success.modified_count == 0:
         raise HTTPException(status_code=404, detail="Case not found or update failed")
+
     return {"message": "Status updated successfully."}
 
 #  DELETE /cases/{case_id}
