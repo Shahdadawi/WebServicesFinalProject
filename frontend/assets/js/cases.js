@@ -197,15 +197,21 @@ document.addEventListener("DOMContentLoaded", () => {
         await updateStatus(id, newStatus);
     });
 
-    //  Update status (global)
+    const user = JSON.parse(localStorage.getItem("user"));
+    const requester_email = user?.email || "";
+
     window.updateStatus = async (id, newStatus) => {
         await fetch(`${baseURL}/cases/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: newStatus })
+            body: JSON.stringify({
+                status_update: { status: newStatus },
+                requester_email: requester_email
+            })
         });
         loadCases();
     };
+
 
     document.getElementById("viewForm").addEventListener("submit", async e => {
         e.preventDefault();
@@ -233,15 +239,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     document.getElementById("reportDetailsForm").addEventListener("submit", async e => {
-    e.preventDefault();
-    const reportId = document.getElementById("reportDetailsSelect").value;
-    const report = await fetchData(`/reports/${reportId}`);
-    const container = document.getElementById("reportDetailsBox");
-    const pre = document.getElementById("reportInfo");
+        e.preventDefault();
+        const reportId = document.getElementById("reportDetailsSelect").value;
+        const report = await fetchData(`/reports/${reportId}`);
+        const container = document.getElementById("reportDetailsBox");
+        const pre = document.getElementById("reportInfo");
 
-    container.classList.remove("d-none");
+        container.classList.remove("d-none");
 
-    pre.innerHTML = `
+        pre.innerHTML = `
 <strong>Report ID:</strong> ${report.report_id}<br>
 <strong>Description:</strong> ${report.incident_details.description}<br>
 <strong>Date:</strong> ${new Date(report.incident_details.date).toLocaleString()}<br>
@@ -254,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <strong>Contact Info:</strong> ${report.contact_info.email || "-"} | ${report.contact_info.phone || "-"}<br>
 <strong>Evidence:</strong> <ul>${(report.evidence || []).map(e => `<li>${e.type}: ${e.url} (${e.description || ""})</li>`).join("")}</ul>
     `;
-});
+    });
 
 
 
