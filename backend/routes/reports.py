@@ -7,6 +7,8 @@ import os, shutil
 
 from backend.database import incident_reports
 from backend.schemas import IncidentReport, UpdateStatus
+from backend.database import report_evidence_collection
+
 
 router = APIRouter()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -97,10 +99,21 @@ async def create_report_with_file(
         "report_id": report_id,
         "reporter_type": reporter_type,
         "anonymous": anonymous,
-        "contact_info": {"email": email, "phone": phone, "preferred_contact": preferred_contact},
+        "contact_info": {
+            "email": email,
+            "phone": phone,
+            "preferred_contact": preferred_contact
+        },
         "incident_details": {
             "date": date,
-            "location": {"country": country, "city": city, "coordinates": {"type": "Point", "coordinates": [lon, lat]}},
+            "location": {
+                "country": country,
+                "city": city,
+                "coordinates": {
+                    "type": "Point",
+                    "coordinates": [lon, lat]
+                }
+            },
             "description": description,
             "violation_types": [violation_type]
         },
@@ -118,7 +131,16 @@ async def create_report_with_file(
         })
 
     result = incident_reports.insert_one(report)
-    return {"message": "Report with file submitted", "id": str(result.inserted_id)}
+
+    
+    new_report_id = str(result.inserted_id)
+    for item in report.get("evidence", []):
+        item["report_id"] = new_report_id
+        item["timestamp"] = datetime.utcnow()
+        report_evidence_collection.insert_one(item)
+
+    return {"message": "Report with file submitted", "id": new_report_id}
+
 
 
 
