@@ -9,7 +9,7 @@ class Coordinates(BaseModel):
 class Location(BaseModel):
     country: str
     region: str
-    city: str  # ✅ ضيفي هاي السطر
+    city: str  
     coordinates: Coordinates
 
 

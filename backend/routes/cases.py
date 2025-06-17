@@ -46,13 +46,13 @@ def update_status(
     status_update: CaseUpdate,
     requester_email: str = Body(...)
 ):
-    # تحديث الحالة في الكولكشن الرئيسي
+    
     success = cases_collection.update_one(
         {"_id": ObjectId(case_id)},
         {"$set": {"status": status_update.status, "updated_at": datetime.utcnow()}}
     )
 
-    # إضافة السجل إلى history
+   
     history_entry = {
         "case_id": case_id,
         "new_status": status_update.status,

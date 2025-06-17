@@ -1,11 +1,63 @@
+const role = localStorage.getItem("role");
+const user = JSON.parse(localStorage.getItem("user"));
+let allCases = [];
+
+
+if (!user || !role || (role !== "admin" && role !== "investigator")) {
+    window.location.replace("index.html");
+}
 
 const API = "http://localhost:8000/victims";
-const user = JSON.parse(localStorage.getItem("user"));
+
 const requester_email = user?.email || "";
+
+
+
+//  Load and display cases
+async function loadCases() {
+    const res = await fetch("http://localhost:8000/cases");
+    const cases = await res.json();
+    allCases = cases;
+}
+
+
 
 async function loadAll() {
     const res = await fetch(`${API}/?requester_email=${requester_email}`);
     const data = await res.json();
+    const list = document.getElementById("victimList");
+    const dropdowns = ["selectVictim", "riskSelect", "riskVictimSelect"];
+    const selectedCaseId = document.getElementById("caseFilter")?.value;
+
+    list.innerHTML = "";
+    dropdowns.forEach(id => {
+        const dd = document.getElementById(id);
+        dd.innerHTML = `<option value="">-- Select --</option>`;
+    });
+
+    data.forEach(v => {
+        const involved = v.cases_involved || [];
+
+        if (selectedCaseId && !involved.includes(selectedCaseId)) return;
+
+        const name = v.display_name || v.full_name || "Unknown";
+        list.innerHTML += `
+        <div class="col-md-4 mb-3">
+          <div class="card p-3">
+            <h5>${name}</h5>
+            <p>ID: ${v.id}</p>
+            <button class="btn btn-sm btn-warning" onclick="loadForEdit('${v.id}')">Update</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteVictim('${v.id}')">Delete</button>
+          </div>
+        </div>`;
+
+        dropdowns.forEach(id => {
+            document.getElementById(id).innerHTML += `<option value="${v.id}">${name}</option>`;
+        });
+    });
+}
+
+function renderVictimCards(data) {
     const list = document.getElementById("victimList");
     const dropdowns = ["selectVictim", "riskSelect", "riskVictimSelect"];
 
@@ -32,6 +84,22 @@ async function loadAll() {
         });
     });
 }
+
+
+
+async function loadCasesForFilter() {
+    const res = await fetch(`http://localhost:8000/cases`);
+    const cases = await res.json();
+    const caseFilter = document.getElementById("caseFilter");
+
+    cases.forEach(c => {
+        const option = document.createElement("option");
+        option.value = c.id;
+        option.textContent = `${c.title} (${c.id})`;
+        caseFilter.appendChild(option);
+    });
+}
+
 
 document.getElementById("victimForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -137,5 +205,44 @@ async function submitRisk() {
     showRisk(victimId);
 }
 
-window.onload = loadAll;
+
+
+window.onload = async () => {
+    await loadAll();
+    await loadCasesForFilter();
+};
+
+document.getElementById("caseFilter").addEventListener("change", async function () {
+    const caseId = this.value;
+    if (!caseId) {
+        await loadAll(); 
+        return;
+    }
+
+    const selectedCase = allCases.find(c => c.id === caseId);
+    if (!selectedCase) {
+        console.warn("Case not found in allCases.");
+        renderVictimCards([]);
+        return;
+    }
+
+    const victimIds = selectedCase.victims || [];
+
+    const res = await fetch(`${API}/?requester_email=${requester_email}`);
+    const allVictims = await res.json();
+
+    const filteredVictims = allVictims.filter(v => {
+    const victimId = v.id || v._id?.$oid || v._id;
+    return victimIds.includes(victimId);
+});
+
+
+    console.log("✅ Victims from case:", filteredVictims);
+    renderVictimCards(filteredVictims); 
+});
+
+
+
+
+
 

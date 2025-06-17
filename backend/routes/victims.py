@@ -1,7 +1,7 @@
 # backend/routes/victims.py
 
 from fastapi import APIRouter, HTTPException, Body , Query
-from backend.database import db  # تأكدي إنو db هو اسم الاتصال بMongoDB
+from backend.database import db 
 from backend.schema_victim import VictimCreate, VictimUpdate, VictimInDB
 from bson import ObjectId
 from backend.database import victims_collection

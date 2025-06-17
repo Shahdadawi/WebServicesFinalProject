@@ -1,3 +1,14 @@
+const role = localStorage.getItem("role");
+const user = JSON.parse(localStorage.getItem("user"));
+
+
+if (!user || !role || (role !== "admin" && role !== "investigator")) {
+    window.location.replace("index.html");
+}
+
+
+
+
 document.addEventListener("DOMContentLoaded", async () => {
     const baseURL = "http://127.0.0.1:8000/analytics";
 

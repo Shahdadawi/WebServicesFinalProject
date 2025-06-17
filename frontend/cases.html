@@ -52,7 +52,7 @@
 
     <div class="container mt-5">
 
-        
+
         <h4>Create New Case</h4>
         <form id="caseForm" class="mb-4 ">
             <div class="row g-2">
@@ -88,9 +88,32 @@
             <button type="submit" class="btn btn-primary mt-3">Add Case</button>
         </form>
 
-        
+
         <h4>Existing Cases</h4>
         <table class="table table-bordered" id="casesTable">
+
+           
+
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by Violation Type">
+                </div>
+                <div class="col-md-3">
+                    <select id="statusFilter" class="form-control">
+                        <option value="">-- Filter by Status --</option>
+                        <option value="new">New</option>
+                        <option value="under_investigation">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" id="cityFilter" class="form-control" placeholder="Filter by City">
+                </div>
+            </div>
+
+
+
             <thead>
                 <tr>
                     <th>Title</th>
@@ -103,14 +126,14 @@
             <tbody></tbody>
         </table>
 
-       
+
         <h4 class="mt-5">Convert Report to Case</h4>
         <form id="convertForm" class="mb-4">
             <select id="reportSelect" class="form-control mb-2"></select>
             <button class="btn btn-success">Convert to Case</button>
         </form>
 
-       
+
         <h4> Update Case Status</h4>
         <form id="statusForm" class="mb-4">
             <div class="row g-2">
@@ -186,9 +209,9 @@
 
     <script src="assets/js/cases.js"></script>
     <script>
-        const role = localStorage.getItem("role");
+        const rolee = localStorage.getItem("role");
 
-        if (role === "admin" || role === "investigator") {
+        if (rolee === "admin" || rolee === "investigator") {
             const dashboardLink = document.getElementById("dashboard-link");
             if (dashboardLink) {
                 dashboardLink.classList.remove("d-none");

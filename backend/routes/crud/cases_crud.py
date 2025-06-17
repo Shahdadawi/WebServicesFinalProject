@@ -43,6 +43,20 @@ def update_case_status(case_id: str, status: str) -> bool:
     )
     return result.modified_count > 0
 
+from backend.database import archived_cases_collection  # تأكدي إنك عرفتي الكولكشن بالأول
+
 def archive_case(case_id: str) -> bool:
+    case = cases_collection.find_one({"_id": ObjectId(case_id)})
+    if not case:
+        return False
+
+    
+    case["archived_at"] = datetime.utcnow()
+
+    
+    archived_cases_collection.insert_one(case)
+
+    
     result = cases_collection.delete_one({"_id": ObjectId(case_id)})
     return result.deleted_count > 0
+

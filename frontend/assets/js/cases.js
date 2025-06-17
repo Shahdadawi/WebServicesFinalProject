@@ -1,3 +1,13 @@
+const role = localStorage.getItem("role");
+const user = JSON.parse(localStorage.getItem("user"));
+let allCases = [];
+
+
+if (!user || !role || (role !== "admin" && role !== "investigator")) {
+    window.location.replace("index.html");
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const baseURL = "http://127.0.0.1:8000";
 
@@ -53,6 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
             option.value = c.id;
             option.textContent = `${c.title} - ${c.id}`;
             caseSelect.appendChild(option);
+            allCases = cases;
+
+            renderCases(cases);
         });
 
         const viewSelect = document.getElementById("viewCaseSelect");
@@ -65,6 +78,27 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     }
+
+    function applyFilters() {
+        const searchKeyword = document.getElementById("searchInput").value.toLowerCase();
+        const selectedStatus = document.getElementById("statusFilter").value;
+        const cityKeyword = document.getElementById("cityFilter").value.toLowerCase();
+
+        const filtered = allCases.filter(c => {
+            const matchViolation = c.violation_types.some(type => type.toLowerCase().includes(searchKeyword));
+            const matchStatus = selectedStatus === "" || c.status === selectedStatus;
+            const matchCity = cityKeyword === "" || (c.location?.city || "").toLowerCase().includes(cityKeyword);
+            return matchViolation && matchStatus && matchCity;
+        });
+
+        renderCases(filtered);
+    }
+
+    ["searchInput", "statusFilter", "cityFilter"].forEach(id => {
+        document.getElementById(id).addEventListener("input", applyFilters);
+        document.getElementById(id).addEventListener("change", applyFilters);
+    });
+
 
     //  Load reports and display in dropdown
     async function loadReports() {
@@ -165,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             date_occurred: new Date(report.incident_details.date).toISOString(),
             date_reported: new Date().toISOString(),
-            victims: [String(report._id)],
+            victims: [report._id?.$oid || report._id],
             perpetrators: [],
             evidence: (report.evidence || []).map(ev => ({
                 ...ev,
@@ -184,6 +218,14 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(converted)
         });
+
+
+        await fetch(`${baseURL}/reports/${reportId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "under_investigation" })
+        });
+
 
         e.target.reset();
         loadCases();
@@ -269,6 +311,54 @@ document.addEventListener("DOMContentLoaded", () => {
         await fetch(`${baseURL}/cases/${id}`, { method: "DELETE" });
         loadCases();
     };
+
+    function renderCases(cases) {
+        const tbody = document.querySelector("#casesTable tbody");
+        const caseSelect = document.getElementById("caseSelect");
+        const viewSelect = document.getElementById("viewCaseSelect");
+
+        tbody.innerHTML = "";
+        caseSelect.innerHTML = "";
+        viewSelect.innerHTML = "";
+
+        cases.forEach(c => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+            <td>${c.title}</td>
+            <td>${c.violation_types.join(", ")}</td>
+            <td>${c.status}</td>
+            <td>${c.location?.city || "N/A"}</td>
+            <td>
+                <button class="btn btn-sm btn-info" onclick="updateStatus('${c.id}', 'resolved')">Resolve</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteCase('${c.id}')">Delete</button>
+            </td>`;
+            tbody.appendChild(tr);
+
+            const option = document.createElement("option");
+            option.value = c.id;
+            option.textContent = `${c.title} - ${c.id}`;
+            caseSelect.appendChild(option);
+
+            const viewOption = document.createElement("option");
+            viewOption.value = c.id;
+            viewOption.textContent = `${c.title} – ${c.id}`;
+            viewSelect.appendChild(viewOption);
+        });
+
+        document.getElementById("searchInput").addEventListener("input", function () {
+            const keyword = this.value.toLowerCase();
+
+            const filtered = allCases.filter(c =>
+                c.violation_types.some(type => type.toLowerCase().includes(keyword))
+            );
+
+            renderCases(filtered);
+        });
+
+    }
+
+
+
 
     //  Initial Load
     loadCases();

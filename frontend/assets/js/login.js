@@ -1,10 +1,6 @@
-console.log(" login.js loaded");
-
+console.log("login.js loaded");
 
 const baseURL = "http://127.0.0.1:8000";
-
-
-
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -14,8 +10,6 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
     console.log("Submitting login for:", email);
 
-    
-
     try {
         const res = await fetch(`${baseURL}/login`, {
             method: "POST",
@@ -23,28 +17,33 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             body: JSON.stringify({ email, password })
         });
 
-        console.log("Raw response:", res);
-
         const data = await res.json();
-        console.log(" Parsed response:", data);
+        console.log("DATA FROM LOGIN API:", data);
 
         if (!res.ok) {
+            console.log("Login failed response:", data);
             document.getElementById("error").textContent = data.detail || "Login failed.";
             return;
         }
 
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        // Check if data contains both role and user
+        if (data.role && data.user) {
+            localStorage.setItem("role", data.role.toLowerCase());
+            localStorage.setItem("user", JSON.stringify(data.user));
+            console.log("Logged in as:", data.role);
 
-        if (data.role === "admin" || data.role === "investigator") {
-            window.location.href = "dashboard.html";
-
+            if (data.role === "admin" || data.role === "investigator") {
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Access denied. You are not allowed here.");
+            }
         } else {
-            alert("Access denied.");
+            console.error("Missing role or user in API response.");
+            document.getElementById("error").textContent = "Invalid server response.";
         }
 
     } catch (err) {
-        console.error(" Login error:", err);
+        console.error("Login error:", err);
         document.getElementById("error").textContent = "Something went wrong. Try again.";
     }
 });

@@ -1,12 +1,24 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const role = localStorage.getItem("role");
+const role = localStorage.getItem("role");
+const user = JSON.parse(localStorage.getItem("user"));
 
-    document.getElementById("userRole").textContent = `Your role: ${role}`;
+
+if (!user || !role || (role !== "admin" && role !== "investigator")) {
+    window.location.replace("index.html");
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const roleElement = document.getElementById("userRole");
+    if (roleElement) {
+        roleElement.textContent = `Your role: ${role}`;
+    }
 
     if (role === "admin") {
-        document.getElementById("adminLinks").style.display = "block";
+        const adminSection = document.getElementById("adminLinks");
+        if (adminSection) adminSection.style.display = "block";
     } else if (role === "investigator") {
-        document.getElementById("investigatorLinks").style.display = "block";
+        const invSection = document.getElementById("investigatorLinks");
+        if (invSection) invSection.style.display = "block";
     } else {
         alert("Access denied.");
         window.location.href = "login.html";

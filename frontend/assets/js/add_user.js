@@ -1,4 +1,15 @@
+const role = localStorage.getItem("role");
+const user = JSON.parse(localStorage.getItem("user"));
+
+
+if (!user || !role || (role !== "admin")) {
+    window.location.replace("index.html");
+}
+
+
+
 const baseURL = "http://127.0.0.1:8000";
+
 
 document.getElementById("addUserForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -20,7 +31,7 @@ document.getElementById("addUserForm").addEventListener("submit", async (e) => {
     const resultBox = document.getElementById("result");
 
     if (res.ok) {
-        resultBox.textContent = "✅ User added successfully!";
+        resultBox.textContent = "User added successfully!";
         resultBox.classList.remove("text-danger");
         resultBox.classList.add("text-success");
         document.getElementById("addUserForm").reset();

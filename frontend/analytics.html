@@ -104,9 +104,9 @@
 
     <script src="assets/js/analytics.js"></script>
     <script>
-        const role = localStorage.getItem("role");
+        const rolee = localStorage.getItem("role");
 
-        if (role === "admin" || role === "investigator") {
+        if (rolee === "admin" || rolee === "investigator") {
             const dashboardLink = document.getElementById("dashboard-link");
             if (dashboardLink) {
                 dashboardLink.classList.remove("d-none");
